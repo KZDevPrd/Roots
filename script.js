@@ -3,13 +3,15 @@ let markers = [];
 let userMarker;
 
 function initMap() {
-    // Initial center (will update once data loads)
-    const initialPos = { lat: 52.52, lng: 13.40 };
+    // Updated initial center for Plovdiv area
+    const initialPos = { lat: 42.14454107158534, lng: 24.755741136905943 };
+    
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 14,
         center: initialPos,
-        disableDefaultUI: true, // Clean look for mobile
-        styles: [ { "featureType": "poi", "stylers": [{ "visibility": "off" }] } ] // Hide generic clutter
+        mapTypeId: 'satellite', // <--- This enables Satellite mode
+        disableDefaultUI: true, 
+        styles: [ { "featureType": "poi", "stylers": [{ "visibility": "off" }] } ] 
     });
 
     loadTourData();
@@ -43,6 +45,8 @@ function renderCards(data) {
         const card = document.createElement('div');
         card.className = 'card';
         card.id = stop.id;
+        
+        // Fixed the Google Maps Deep Link URL structure below
         card.innerHTML = `
             <img src="${stop.picture}" class="card-img" alt="${stop.name}">
             <div class="card-content">
@@ -60,17 +64,15 @@ function renderCards(data) {
 function setupIntersectionObserver(data) {
     const options = {
         root: document.getElementById('story-section'),
-        threshold: 0.6 // Trigger when 60% of card is visible
+        threshold: 0.6 
     };
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Highlight Card
                 document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
                 entry.target.classList.add('active');
 
-                // Pan Map to stop coordinates
                 const stopData = data.find(s => s.id === entry.target.id);
                 map.panTo({ lat: stopData.lat, lng: stopData.lng });
                 map.setZoom(stopData.zoomLevel || 17);
@@ -105,6 +107,10 @@ function trackUserLocation() {
             } else {
                 userMarker.setPosition(pos);
             }
+        }, (error) => {
+            console.warn("Geolocation error:", error);
+        }, {
+            enableHighAccuracy: true
         });
     }
 
