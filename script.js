@@ -103,58 +103,45 @@ function renderCards(data) {
 
 // 4. Handle Scroll Interactivity
 function setupIntersectionObserver(data) {
-    // 1. We use a more sensitive observer for the Header
-    const headerOptions = {
+    const options = {
         root: document.getElementById('story-section'),
-        threshold: 0.1 // Trigger even if only 10% is visible
+        // '0' means as soon as 1 pixel of the element enters/leaves the view
+        threshold: [0, 0.5, 1.0] 
     };
 
-    // 2. We use a stricter observer for the Cards
-    const cardOptions = {
-        root: document.getElementById('story-section'),
-        threshold: 0.6 // Trigger when card is well into view
-    };
-
-    const observerCallback = (entries) => {
+    const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // Check if we hit the Header (The "Overview" trigger)
-                if (entry.target.classList.contains('tour-header')) {
-                    console.log("Header visible: Zooming out to overview");
-                    map.fitBounds(bounds);
-                    // Add some padding so markers aren't touching the edge
-                    map.panBy(0, -20); 
-                    
-                    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-                    return;
-                }
+            // Check if the Header is in view (even slightly)
+            const isHeaderVisible = entry.target.classList.contains('tour-header') && entry.isIntersecting;
 
-                // Handle Card zooming
+            if (isHeaderVisible) {
+                console.log("📍 Header visible: Overview Mode");
+                map.fitBounds(bounds);
+                // Remove 'active' status from all cards
+                document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+            } 
+            
+            // If it's a Card and it's heavily intersecting (0.5 threshold)
+            else if (entry.isIntersecting && entry.intersectionRatio > 0.5 && entry.target.classList.contains('card')) {
+                console.log("📍 Card focused:", entry.target.id);
+                
+                document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+                entry.target.classList.add('active');
+
                 const stopData = data.find(s => s.id === entry.target.id);
                 if (stopData) {
-                    console.log("Card visible: Zooming to", stopData.name);
-                    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-                    entry.target.classList.add('active');
-
                     map.panTo({ lat: stopData.lat, lng: stopData.lng });
                     map.setZoom(stopData.zoomLevel || 18);
                 }
             }
         });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, cardOptions);
-    const headerObserver = new IntersectionObserver(observerCallback, headerOptions);
+    }, options);
 
     // Watch the Header
     const header = document.querySelector('.tour-header');
-    if (header) {
-        headerObserver.observe(header);
-    } else {
-        console.error("Could not find .tour-header in HTML. Check your class names!");
-    }
+    if (header) observer.observe(header);
     
-    // Watch the Cards
+    // Watch all the Cards
     document.querySelectorAll('.card').forEach(card => observer.observe(card));
 }
 
