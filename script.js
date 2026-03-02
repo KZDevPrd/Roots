@@ -3,10 +3,9 @@ let markers = [];
 let userMarker;
 let bounds;
 
-// Menu Toggle Logic
-document.getElementById('menu-toggle').addEventListener('click', () => {
-    document.getElementById('side-menu').classList.toggle('active');
-});
+// UI Controls
+document.getElementById('menu-toggle').onclick = () => document.getElementById('side-menu').classList.add('active');
+document.getElementById('close-menu').onclick = () => document.getElementById('side-menu').classList.remove('active');
 
 function initMap() {
     const initialPos = { lat: 42.144541, lng: 24.755741 };
@@ -44,12 +43,12 @@ function renderCards(data) {
         card.className = 'card';
         card.id = stop.id;
         card.innerHTML = `
-            <img src="${stop.picture}" class="card-img" style="width:100%; border-radius:12px; margin-bottom:15px;">
-            <div class="card-content">
-                <h2 style="color:var(--accent); margin-bottom:10px;">${stop.name}</h2>
-                <p style="margin-bottom:15px; line-height:1.5;">${stop.description}</p>
-                <div style="background:#fdf2e9; padding:15px; border-left:4px solid var(--accent); border-radius:8px;">
-                    <strong>Local Tip:</strong> ${stop.facts}
+            <img src="${stop.picture}" class="card-img">
+            <h2 style="color:var(--accent); margin-bottom:10px;">${stop.name}</h2>
+            <div style="flex:1; overflow-y:auto;">
+                <p style="margin-bottom:15px; line-height:1.4;">${stop.description}</p>
+                <div style="background:#fdf2e9; padding:12px; border-left:4px solid var(--accent); font-size:0.9rem;">
+                    ${stop.facts}
                 </div>
             </div>
             <a href="https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}&travelmode=walking" 
@@ -61,7 +60,7 @@ function renderCards(data) {
 }
 
 function setupIntersectionObserver(data) {
-    const options = { root: document.getElementById('story-section'), threshold: 0.4 };
+    const options = { root: document.getElementById('story-section'), threshold: 0.6 };
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -95,7 +94,4 @@ function trackUserLocation() {
             } else { userMarker.setPosition(pos); }
         }, null, { enableHighAccuracy: true });
     }
-    document.getElementById('recenter-btn').addEventListener('click', () => {
-        if (userMarker) map.panTo(userMarker.getPosition());
-    });
 }
