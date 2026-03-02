@@ -44,11 +44,11 @@ function renderCards(data) {
         card.id = stop.id;
         card.innerHTML = `
             <img src="${stop.picture}" class="card-img">
-            <h2 style="color:var(--accent); margin-bottom:10px;">${stop.name}</h2>
+            <h2 style="color:var(--accent); font-weight:800; margin-bottom:10px;">${stop.name}</h2>
             <div style="flex:1;">
-                <p style="margin-bottom:15px; line-height:1.5;">${stop.description}</p>
-                <div style="background:#fdf2e9; padding:12px; border-left:4px solid var(--accent); border-radius:8px; font-size:0.9rem;">
-                    <strong>Tip:</strong> ${stop.facts}
+                <p style="margin-bottom:15px; line-height:1.6; color:#444;">${stop.description}</p>
+                <div class="fact-box">
+                    <strong>Local Tip:</strong> ${stop.facts}
                 </div>
             </div>
             <a href="https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}&travelmode=walking" 
