@@ -3,13 +3,15 @@ let markers = [];
 let userMarker;
 let bounds;
 
+// Menu Toggle Logic
+document.getElementById('menu-toggle').addEventListener('click', () => {
+    document.getElementById('side-menu').classList.toggle('active');
+});
+
 function initMap() {
     const initialPos = { lat: 42.144541, lng: 24.755741 };
     map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 14,
-        center: initialPos,
-        mapTypeId: 'satellite',
-        disableDefaultUI: true,
+        zoom: 14, center: initialPos, mapTypeId: 'satellite', disableDefaultUI: true,
         styles: [{ "featureType": "poi", "stylers": [{ "visibility": "off" }] }]
     });
     bounds = new google.maps.LatLngBounds();
@@ -23,7 +25,7 @@ async function loadTourData() {
         const data = await response.json();
         renderCards(data);
         setupIntersectionObserver(data);
-    } catch (err) { console.error("JSON Load Error", err); }
+    } catch (err) { console.error(err); }
 }
 
 function renderCards(data) {
@@ -31,16 +33,8 @@ function renderCards(data) {
     data.forEach((stop, index) => {
         const markerPos = { lat: stop.lat, lng: stop.lng };
         const marker = new google.maps.Marker({
-            position: markerPos,
-            map: map,
-            icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                fillColor: '#d35400',
-                fillOpacity: 1,
-                strokeWeight: 2,
-                strokeColor: 'white',
-                scale: 12
-            },
+            position: markerPos, map: map,
+            icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#d35400', fillOpacity: 1, strokeWeight: 2, strokeColor: 'white', scale: 12 },
             label: { text: (index + 1).toString(), color: "white", fontWeight: "bold" }
         });
         markers.push(marker);
@@ -50,33 +44,24 @@ function renderCards(data) {
         card.className = 'card';
         card.id = stop.id;
         card.innerHTML = `
-            <img src="${stop.picture}" class="card-img" alt="${stop.name}">
+            <img src="${stop.picture}" class="card-img" style="width:100%; border-radius:12px; margin-bottom:15px;">
             <div class="card-content">
-                <h2 class="card-name">${stop.name}</h2>
-                <p class="card-desc">${stop.description}</p>
-                <div class="fact-box"><strong>Local Secret:</strong> ${stop.facts}</div>
+                <h2 style="color:var(--accent); margin-bottom:10px;">${stop.name}</h2>
+                <p style="margin-bottom:15px; line-height:1.5;">${stop.description}</p>
+                <div style="background:#fdf2e9; padding:15px; border-left:4px solid var(--accent); border-radius:8px;">
+                    <strong>Local Tip:</strong> ${stop.facts}
+                </div>
             </div>
             <a href="https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}&travelmode=walking" 
                class="cta-button" target="_blank">Start Navigation</a>
         `;
         container.appendChild(card);
-
-        if (index < data.length - 1) {
-            const bridge = document.createElement('div');
-            bridge.className = 'route-bridge';
-            bridge.innerHTML = `<span>↓↓</span>`;
-            container.appendChild(bridge);
-        }
     });
     map.fitBounds(bounds);
 }
 
 function setupIntersectionObserver(data) {
-    const options = {
-        root: document.getElementById('story-section'),
-        threshold: 0.4 // Only pan map when 40% of the card is visible
-    };
-
+    const options = { root: document.getElementById('story-section'), threshold: 0.4 };
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -94,7 +79,6 @@ function setupIntersectionObserver(data) {
             }
         });
     }, options);
-
     observer.observe(document.querySelector('.tour-header'));
     document.querySelectorAll('.card').forEach(card => observer.observe(card));
 }
@@ -112,9 +96,6 @@ function trackUserLocation() {
         }, null, { enableHighAccuracy: true });
     }
     document.getElementById('recenter-btn').addEventListener('click', () => {
-        if (userMarker) {
-            map.panTo(userMarker.getPosition());
-            map.setZoom(17);
-        }
+        if (userMarker) map.panTo(userMarker.getPosition());
     });
 }

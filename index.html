@@ -15,10 +15,23 @@
 <body>
 
     <div id="app-container">
+        <nav class="top-nav">
+            <div class="nav-content">
+                <span class="app-logo">ROOTS</span>
+                <div class="burger-menu" id="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+
         <section id="map-section">
             <div id="map"></div>
             <button id="recenter-btn">🎯</button>
         </section>
+
+        <div class="map-spacer"></div>
 
         <section id="story-section">
             <header class="tour-header">
@@ -36,6 +49,12 @@
                 <div class="safe-area-spacer"></div>
             </footer>
         </section>
+    </div>
+
+    <div id="side-menu" class="side-menu">
+        <a href="#">About Roots</a>
+        <a href="#">Other Routes</a>
+        <a href="#">Contact Support</a>
     </div>
 
     <script src="script.js"></script>
