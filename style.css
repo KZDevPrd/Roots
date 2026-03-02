@@ -1,46 +1,43 @@
 :root {
     --bg-color: #fcfaf7;
     --card-bg: #ffffff;
-    --text-main: #2d2d2d;
     --accent: #d35400;
     --map-height: 30vh;
     --story-height: 70vh;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--bg-color);
     height: 100vh;
-    overflow: hidden;
+    overflow: hidden; /* Prevents the browser from bouncing */
 }
 
 #app-container { display: flex; flex-direction: column; height: 100vh; }
 
-/* --- Map --- */
-#map-section { height: var(--map-height); position: relative; z-index: 10; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+#map-section { height: var(--map-height); position: relative; z-index: 10; }
 #map { height: 100%; width: 100%; }
+
 #recenter-btn {
     position: absolute; bottom: 10px; right: 10px;
-    background: white; border: none; width: 40px; height: 40px;
-    border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 11;
+    background: white; border: none; width: 44px; height: 44px;
+    border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 11;
 }
 
-/* --- Story Scrolling --- */
 #story-section {
     height: var(--story-height);
     overflow-y: auto;
-    scroll-behavior: smooth;
     background: var(--bg-color);
-    -webkit-overflow-scrolling: touch;
+    /* This ensures we account for the bottom "Home Bar" on new phones */
+    padding-bottom: env(safe-area-inset-bottom); 
 }
 
-/* Hide scrollbar */
 #story-section::-webkit-scrollbar { display: none; }
 
 .tour-header {
-    height: var(--story-height); /* Header still takes full initial view */
+    min-height: var(--story-height);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -48,45 +45,55 @@ body {
     padding: 30px;
 }
 
-.tour-header h1 { font-size: 2.2rem; color: var(--accent); margin-bottom: 15px; }
-
 .card {
     background: var(--card-bg);
-    padding: 40px 24px;
-    min-height: 50vh; /* Ensures cards feel substantial */
-    border-bottom: 1px solid #eee;
-    opacity: 0.4;
-    transition: opacity 0.6s ease;
+    padding: 30px 20px;
+    margin-bottom: 10px;
+    /* IMPORTANT: Height is now AUTO so content is never cut */
+    height: auto; 
+    min-height: 50vh;
+    opacity: 0.3;
+    transition: opacity 0.5s ease;
+    display: block; /* Changed from flex to block to prevent layout squishing */
 }
 
 .card.active { opacity: 1; }
 
 .card-img {
     width: 100%;
-    max-height: 300px;
+    height: auto; /* Image scales naturally */
+    max-height: 250px;
     object-fit: cover;
     border-radius: 12px;
     margin-bottom: 20px;
 }
 
-.card-name { font-size: 1.6rem; margin-bottom: 10px; }
-.fact-box {
-    background: #fdf2e9;
-    padding: 15px;
-    border-left: 4px solid var(--accent);
-    margin: 20px 0;
-    font-size: 0.95rem;
+.card-name { 
+    font-size: 1.7rem; 
+    margin-bottom: 15px; 
+    color: var(--accent);
+    line-height: 1.2;
 }
+
+.card-desc { margin-bottom: 20px; line-height: 1.5; }
 
 .cta-button {
-    display: block; width: 100%; background: var(--accent);
-    color: white; text-align: center; padding: 16px;
-    text-decoration: none; border-radius: 12px; font-weight: bold;
+    display: block;
+    width: 100%;
+    background: var(--accent);
+    color: white;
+    text-align: center;
+    padding: 18px;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: bold;
+    margin-top: 20px;
+    /* Extra bottom margin to ensure it's not too close to the edge */
+    margin-bottom: 10px; 
 }
 
-/* --- The Bridges (Arrows) --- */
 .route-bridge {
-    height: 180px; /* Space between stories */
+    height: 150px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -94,7 +101,6 @@ body {
     color: var(--accent);
 }
 
-.bridge-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; opacity: 0.6; }
 .bridge-arrows { font-size: 2rem; animation: bounce 2s infinite; }
 
 @keyframes bounce {
@@ -102,5 +108,5 @@ body {
     50% { transform: translateY(15px); }
 }
 
-.tour-footer { padding: 60px 24px; text-align: center; background: #eeeae4; }
-.back-btn { background: none; border: 1px solid var(--accent); color: var(--accent); padding: 8px 16px; border-radius: 20px; margin-top: 15px; }
+.tour-footer { padding: 60px 24px; text-align: center; }
+.safe-area-spacer { height: 40px; } /* Additional buffer for the footer */

@@ -5,7 +5,6 @@ let bounds;
 
 function initMap() {
     const initialPos = { lat: 42.144541, lng: 24.755741 };
-    
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 14,
         center: initialPos,
@@ -13,7 +12,6 @@ function initMap() {
         disableDefaultUI: true,
         styles: [{ "featureType": "poi", "stylers": [{ "visibility": "off" }] }]
     });
-
     bounds = new google.maps.LatLngBounds();
     loadTourData();
     trackUserLocation();
@@ -25,18 +23,13 @@ async function loadTourData() {
         const data = await response.json();
         renderCards(data);
         setupIntersectionObserver(data);
-    } catch (err) {
-        console.error("Data load failed", err);
-    }
+    } catch (err) { console.error(err); }
 }
 
 function renderCards(data) {
     const container = document.getElementById('card-container');
-    
     data.forEach((stop, index) => {
         const markerPos = { lat: stop.lat, lng: stop.lng };
-        
-        // Add Marker
         const marker = new google.maps.Marker({
             position: markerPos,
             map: map,
@@ -53,41 +46,33 @@ function renderCards(data) {
         markers.push(marker);
         bounds.extend(markerPos);
 
-        // Add Card
         const card = document.createElement('div');
         card.className = 'card';
         card.id = stop.id;
         card.innerHTML = `
             <img src="${stop.picture}" class="card-img">
-            <div class="card-content">
-                <h2 class="card-name">${stop.name}</h2>
-                <p class="card-desc">${stop.description}</p>
-                <div class="fact-box"><strong>Local Secret:</strong> ${stop.facts}</div>
-                <a href="https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}&travelmode=walking" 
-                   class="cta-button" target="_blank">Navigate to Stop</a>
-            </div>
+            <h2 class="card-name">${stop.name}</h2>
+            <p class="card-desc">${stop.description}</p>
+            <div class="fact-box"><strong>Local Secret:</strong> ${stop.facts}</div>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}&travelmode=walking" 
+               class="cta-button" target="_blank">Start Navigation</a>
         `;
         container.appendChild(card);
 
-        // Add Bridge (if not last)
         if (index < data.length - 1) {
             const bridge = document.createElement('div');
             bridge.className = 'route-bridge';
-            bridge.innerHTML = `
-                <div class="bridge-label">Next Discovery</div>
-                <div class="bridge-arrows">↓↓</div>
-            `;
+            bridge.innerHTML = `<div class="bridge-arrows">↓↓</div>`;
             container.appendChild(bridge);
         }
     });
-
     map.fitBounds(bounds);
 }
 
 function setupIntersectionObserver(data) {
     const options = {
         root: document.getElementById('story-section'),
-        threshold: 0.5 // Trigger when card is halfway in view
+        threshold: 0.3 // More sensitive to prevent "graying out"
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -97,7 +82,6 @@ function setupIntersectionObserver(data) {
                     map.fitBounds(bounds);
                     return;
                 }
-
                 const stopData = data.find(s => s.id === entry.target.id);
                 if (stopData) {
                     document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
@@ -122,9 +106,7 @@ function trackUserLocation() {
                     position: pos, map: map, zIndex: 99,
                     icon: { path: google.maps.SymbolPath.CIRCLE, scale: 7, fillColor: "#4285F4", fillOpacity: 1, strokeWeight: 2, strokeColor: "white" }
                 });
-            } else {
-                userMarker.setPosition(pos);
-            }
+            } else { userMarker.setPosition(pos); }
         }, null, { enableHighAccuracy: true });
     }
     document.getElementById('recenter-btn').addEventListener('click', () => {
