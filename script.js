@@ -103,38 +103,58 @@ function renderCards(data) {
 
 // 4. Handle Scroll Interactivity
 function setupIntersectionObserver(data) {
-    const options = {
+    // 1. We use a more sensitive observer for the Header
+    const headerOptions = {
         root: document.getElementById('story-section'),
-        threshold: 0.5 // Trigger when card is halfway in view
+        threshold: 0.1 // Trigger even if only 10% is visible
     };
 
-    const observer = new IntersectionObserver((entries) => {
+    // 2. We use a stricter observer for the Cards
+    const cardOptions = {
+        root: document.getElementById('story-section'),
+        threshold: 0.6 // Trigger when card is well into view
+    };
+
+    const observerCallback = (entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Case A: User scrolled back to the Top Header
+                // Check if we hit the Header (The "Overview" trigger)
                 if (entry.target.classList.contains('tour-header')) {
-                    map.fitBounds(bounds); // Zoom back out to show all
+                    console.log("Header visible: Zooming out to overview");
+                    map.fitBounds(bounds);
+                    // Add some padding so markers aren't touching the edge
+                    map.panBy(0, -20); 
+                    
                     document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
                     return;
                 }
 
-                // Case B: User is on a specific card
-                document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-                entry.target.classList.add('active');
-
+                // Handle Card zooming
                 const stopData = data.find(s => s.id === entry.target.id);
                 if (stopData) {
+                    console.log("Card visible: Zooming to", stopData.name);
+                    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+                    entry.target.classList.add('active');
+
                     map.panTo({ lat: stopData.lat, lng: stopData.lng });
                     map.setZoom(stopData.zoomLevel || 18);
                 }
             }
         });
-    }, options);
+    };
 
-    // Watch the Header and the Cards
+    const observer = new IntersectionObserver(observerCallback, cardOptions);
+    const headerObserver = new IntersectionObserver(observerCallback, headerOptions);
+
+    // Watch the Header
     const header = document.querySelector('.tour-header');
-    if (header) observer.observe(header);
+    if (header) {
+        headerObserver.observe(header);
+    } else {
+        console.error("Could not find .tour-header in HTML. Check your class names!");
+    }
     
+    // Watch the Cards
     document.querySelectorAll('.card').forEach(card => observer.observe(card));
 }
 
