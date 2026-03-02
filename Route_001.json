@@ -22,7 +22,7 @@
     {
     "id": "stop3",
     "name": "Kapana District",
-    "picture": "kapanaDistrict.jpg",
+    "picture": "assets/kapanaDistrict.jpg",
     "description": "Walk the main street, which used to be a shopping destination for all the people in town",
     "facts": "The buildings are predominantly from the 19th centure and feature a xyz architecture.",
     "lat": 42.150016, 
