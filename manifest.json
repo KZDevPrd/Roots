@@ -1,0 +1,16 @@
+{
+  "short_name": "Roots",
+  "name": "Roots: Local Guide",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#fcfaf7",
+  "display": "standalone",
+  "scope": "./",
+  "theme_color": "#d35400"
+}

@@ -2,9 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Roots | Local Guide</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Roots">
+    <meta name="theme-color" content="#d35400">
+
     <link rel="stylesheet" href="style.css">
+    
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADZHmJRts2oefxj8G2Jui8I_kihovwH5U&callback=initMap" async defer></script>
 </head>
 <body>
@@ -18,16 +27,17 @@
         <section id="story-section">
             <header class="tour-header">
                 <h1>Neighborhood Roots</h1>
-                <p>A curated walk through my favorite corners.</p>
-                <div class="scroll-indicator">Scroll to start ↓</div>
+                <p>Follow the path to discover the local heart of the city.</p>
+                <div class="scroll-indicator">Swipe up to start ↓</div>
             </header>
 
             <div id="card-container">
                 </div>
-
+            
             <footer class="tour-footer">
-                <p>Hope you enjoyed the walk!</p>
-                <p>— Your Host</p>
+                <p>You've reached the end!</p>
+                <p>I hope you enjoyed my favorite spots.</p>
+                <button onclick="document.getElementById('story-section').scrollTo(0,0)" class="back-to-top">Back to Start</button>
             </footer>
         </section>
     </div>
