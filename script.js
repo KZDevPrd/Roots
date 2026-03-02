@@ -24,7 +24,7 @@ async function loadTourData() {
         const data = await response.json();
         renderCards(data);
         setupIntersectionObserver(data);
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error("JSON Error:", err); }
 }
 
 function renderCards(data) {
@@ -45,16 +45,23 @@ function renderCards(data) {
         card.innerHTML = `
             <img src="${stop.picture}" class="card-img">
             <h2 style="color:var(--accent); margin-bottom:10px;">${stop.name}</h2>
-            <div style="flex:1; overflow-y:auto;">
-                <p style="margin-bottom:15px; line-height:1.4;">${stop.description}</p>
-                <div style="background:#fdf2e9; padding:12px; border-left:4px solid var(--accent); font-size:0.9rem;">
-                    ${stop.facts}
+            <div style="flex:1;">
+                <p style="margin-bottom:15px; line-height:1.5;">${stop.description}</p>
+                <div style="background:#fdf2e9; padding:12px; border-left:4px solid var(--accent); border-radius:8px; font-size:0.9rem;">
+                    <strong>Tip:</strong> ${stop.facts}
                 </div>
             </div>
             <a href="https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}&travelmode=walking" 
                class="cta-button" target="_blank">Start Navigation</a>
         `;
         container.appendChild(card);
+
+        if (index < data.length - 1) {
+            const bridge = document.createElement('div');
+            bridge.className = 'route-bridge';
+            bridge.innerHTML = `<div class="bridge-arrows">↓↓</div>`;
+            container.appendChild(bridge);
+        }
     });
     map.fitBounds(bounds);
 }
@@ -94,4 +101,5 @@ function trackUserLocation() {
             } else { userMarker.setPosition(pos); }
         }, null, { enableHighAccuracy: true });
     }
+    document.getElementById('recenter-btn').onclick = () => { if (userMarker) map.panTo(userMarker.getPosition()); };
 }

@@ -2,37 +2,34 @@
     --bg-color: #fcfaf7;
     --card-bg: #ffffff;
     --accent: #d35400;
-    --nav-height: 60px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: var(--bg-color);
-    height: 100vh;
-    overflow: hidden; /* Prevent body bounce */
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden; /* Prevent the whole page from bouncing */
 }
 
 #app-container {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    /* Grid Rows: Nav (auto), Map (30%), Spacer (6px), Story (remaining space) */
+    grid-template-rows: auto 30vh 6px 1fr;
     height: 100vh;
+    width: 100%;
 }
 
-/* --- Navigation --- */
+/* --- Top Nav --- */
 .top-nav {
-    height: var(--nav-height);
     background: var(--bg-color);
     padding-top: env(safe-area-inset-top);
-    display: flex;
-    align-items: center;
     border-bottom: 1px solid rgba(0,0,0,0.05);
-    flex-shrink: 0; /* Prevents nav from being squished */
+    z-index: 100;
 }
 
 .nav-content {
-    width: 100%;
+    height: 60px;
     padding: 0 20px;
     display: flex;
     justify-content: space-between;
@@ -46,13 +43,12 @@ body {
 
 /* --- Map Section --- */
 #map-section {
-    height: 30vh;
-    width: 100%;
     position: relative;
-    flex-shrink: 0; /* FORCES the map to stay 30% height */
+    width: 100%;
+    height: 100%; /* Fills the 30vh grid row */
 }
 
-#map { height: 100%; width: 100%; }
+#map { height: 100%; width: 100%; display: block; }
 
 #recenter-btn {
     position: absolute; bottom: 10px; right: 10px;
@@ -61,24 +57,22 @@ body {
 }
 
 .map-spacer {
-    height: 6px;
     background: var(--bg-color);
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    flex-shrink: 0;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
-/* --- Story Section (The Pager) --- */
+/* --- Story Scroller (The Paged Experience) --- */
 #story-section {
-    flex-grow: 1; /* Takes up all remaining 70% space */
-    overflow-y: auto;
-    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory; /* Restoration of Anchoring */
     background: var(--bg-color);
+    -webkit-overflow-scrolling: touch;
 }
 
 #story-section::-webkit-scrollbar { display: none; }
 
 .tour-header, .card, .tour-footer {
-    min-height: 100%; /* Each page fills the remaining 70% area */
+    min-height: 100%; /* Each section fills the story container */
     scroll-snap-align: start;
     scroll-snap-stop: always;
     padding: 30px 24px;
@@ -90,18 +84,18 @@ body {
     background: var(--card-bg);
     opacity: 0.3;
     transition: opacity 0.5s ease;
-    /* Added massive bottom padding to clear phone menu */
-    padding-bottom: calc(80px + env(safe-area-inset-bottom)); 
+    /* Massive bottom padding to ensure button is high enough for phone menu */
+    padding-bottom: calc(100px + env(safe-area-inset-bottom)); 
 }
 
 .card.active { opacity: 1; }
 
 .card-img {
     width: 100%;
-    height: 180px;
+    max-height: 200px;
     object-fit: cover;
     border-radius: 12px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .cta-button {
@@ -114,19 +108,36 @@ body {
     text-decoration: none;
     border-radius: 14px;
     font-weight: bold;
-    margin-top: auto; /* Pushes button to bottom of content */
-    margin-bottom: 10px; 
+    margin-top: auto; /* Pushes button to the bottom of the content */
+    margin-bottom: 20px; /* Safe distance from the next snap point */
 }
 
-/* --- Side Menu --- */
+/* --- Navigation Arrows Bridge --- */
+.route-bridge {
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+}
+
+.bridge-arrows { font-size: 1.5rem; animation: bounce 2s infinite; }
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+}
+
+/* --- Side Menu Overlay --- */
 .side-menu {
     position: fixed;
-    top: 0; right: -100%; width: 80%; height: 100vh;
-    background: white; z-index: 1000; transition: 0.4s ease;
+    top: 0; right: -100%; width: 85%; height: 100vh;
+    background: white; z-index: 1000; transition: 0.4s ease-out;
     display: flex; flex-direction: column; justify-content: center;
-    align-items: center; gap: 30px;
+    align-items: center; gap: 40px;
 }
 
-.side-menu.active { right: 0; box-shadow: -10px 0 30px rgba(0,0,0,0.2); }
-.side-menu a { font-size: 1.5rem; text-decoration: none; color: var(--accent); font-weight: bold; }
+.side-menu.active { right: 0; box-shadow: -10px 0 30px rgba(0,0,0,0.1); }
+.side-menu a { font-size: 1.6rem; text-decoration: none; color: var(--accent); font-weight: bold; }
 .close-menu { position: absolute; top: 30px; right: 30px; font-size: 2rem; color: var(--accent); }
