@@ -23,7 +23,7 @@ async function loadTourData() {
         const data = await response.json();
         renderCards(data);
         setupIntersectionObserver(data);
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error("JSON Load Error", err); }
 }
 
 function renderCards(data) {
@@ -50,10 +50,12 @@ function renderCards(data) {
         card.className = 'card';
         card.id = stop.id;
         card.innerHTML = `
-            <img src="${stop.picture}" class="card-img">
-            <h2 class="card-name">${stop.name}</h2>
-            <p class="card-desc">${stop.description}</p>
-            <div class="fact-box"><strong>Local Secret:</strong> ${stop.facts}</div>
+            <img src="${stop.picture}" class="card-img" alt="${stop.name}">
+            <div class="card-content">
+                <h2 class="card-name">${stop.name}</h2>
+                <p class="card-desc">${stop.description}</p>
+                <div class="fact-box"><strong>Local Secret:</strong> ${stop.facts}</div>
+            </div>
             <a href="https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}&travelmode=walking" 
                class="cta-button" target="_blank">Start Navigation</a>
         `;
@@ -62,7 +64,7 @@ function renderCards(data) {
         if (index < data.length - 1) {
             const bridge = document.createElement('div');
             bridge.className = 'route-bridge';
-            bridge.innerHTML = `<div class="bridge-arrows">↓↓</div>`;
+            bridge.innerHTML = `<span>↓↓</span>`;
             container.appendChild(bridge);
         }
     });
@@ -72,7 +74,7 @@ function renderCards(data) {
 function setupIntersectionObserver(data) {
     const options = {
         root: document.getElementById('story-section'),
-        threshold: 0.3 // More sensitive to prevent "graying out"
+        threshold: 0.4 // Only pan map when 40% of the card is visible
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -110,6 +112,9 @@ function trackUserLocation() {
         }, null, { enableHighAccuracy: true });
     }
     document.getElementById('recenter-btn').addEventListener('click', () => {
-        if (userMarker) map.panTo(userMarker.getPosition());
+        if (userMarker) {
+            map.panTo(userMarker.getPosition());
+            map.setZoom(17);
+        }
     });
 }

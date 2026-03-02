@@ -12,32 +12,39 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--bg-color);
     height: 100vh;
-    overflow: hidden; /* Prevents the browser from bouncing */
+    overflow: hidden;
 }
 
 #app-container { display: flex; flex-direction: column; height: 100vh; }
 
+/* --- Map --- */
 #map-section { height: var(--map-height); position: relative; z-index: 10; }
 #map { height: 100%; width: 100%; }
-
 #recenter-btn {
     position: absolute; bottom: 10px; right: 10px;
     background: white; border: none; width: 44px; height: 44px;
     border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 11;
 }
 
+/* --- Story Scroller (Paged Snapping) --- */
 #story-section {
     height: var(--story-height);
     overflow-y: auto;
+    scroll-snap-type: y mandatory; /* This enables the "Anchor" feeling */
+    scroll-behavior: smooth;
     background: var(--bg-color);
-    /* This ensures we account for the bottom "Home Bar" on new phones */
-    padding-bottom: env(safe-area-inset-bottom); 
 }
 
 #story-section::-webkit-scrollbar { display: none; }
 
+.tour-header, .card, .tour-footer {
+    scroll-snap-align: start; /* Anchor the TOP of each section */
+    scroll-snap-stop: always;
+    width: 100%;
+}
+
 .tour-header {
-    min-height: var(--story-height);
+    height: var(--story-height);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -45,37 +52,42 @@ body {
     padding: 30px;
 }
 
+.tour-header h1 { font-size: 2.2rem; color: var(--accent); margin-bottom: 15px; }
+
+/* --- Cards --- */
 .card {
     background: var(--card-bg);
-    padding: 30px 20px;
-    margin-bottom: 10px;
-    /* IMPORTANT: Height is now AUTO so content is never cut */
-    height: auto; 
-    min-height: 50vh;
+    padding: 30px 24px;
+    min-height: var(--story-height); /* Ensure short cards still feel like a full page */
+    height: auto; /* Allow long stories to expand the card */
+    display: flex;
+    flex-direction: column;
     opacity: 0.3;
-    transition: opacity 0.5s ease;
-    display: block; /* Changed from flex to block to prevent layout squishing */
+    transition: opacity 0.6s ease;
 }
 
 .card.active { opacity: 1; }
 
 .card-img {
     width: 100%;
-    height: auto; /* Image scales naturally */
-    max-height: 250px;
+    height: 220px;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 16px;
     margin-bottom: 20px;
+    flex-shrink: 0; /* Prevents the image from squishing */
 }
 
-.card-name { 
-    font-size: 1.7rem; 
-    margin-bottom: 15px; 
-    color: var(--accent);
-    line-height: 1.2;
-}
+.card-name { font-size: 1.7rem; margin-bottom: 12px; color: var(--accent); }
+.card-desc { font-size: 1.05rem; line-height: 1.6; margin-bottom: 20px; }
 
-.card-desc { margin-bottom: 20px; line-height: 1.5; }
+.fact-box {
+    background: #fdf2e9;
+    padding: 16px;
+    border-radius: 12px;
+    border-left: 5px solid var(--accent);
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
 
 .cta-button {
     display: block;
@@ -85,28 +97,31 @@ body {
     text-align: center;
     padding: 18px;
     text-decoration: none;
-    border-radius: 12px;
+    border-radius: 14px;
     font-weight: bold;
-    margin-top: 20px;
-    /* Extra bottom margin to ensure it's not too close to the edge */
-    margin-bottom: 10px; 
+    margin-top: auto; /* Pushes button to the bottom of the card content */
+    margin-bottom: 20px;
 }
 
+/* --- Bridges & Spacing --- */
 .route-bridge {
-    height: 150px;
+    height: 100px; /* Buffer space before the next snap point */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--accent);
+    font-size: 1.5rem;
+}
+
+.tour-footer {
+    height: var(--story-height);
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    color: var(--accent);
+    text-align: center;
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
-.bridge-arrows { font-size: 2rem; animation: bounce 2s infinite; }
+.safe-area-spacer { height: 40px; }
 
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(15px); }
-}
-
-.tour-footer { padding: 60px 24px; text-align: center; }
-.safe-area-spacer { height: 40px; } /* Additional buffer for the footer */
+.back-btn { background: none; border: 1px solid var(--accent); color: var(--accent); padding: 10px 20px; border-radius: 20px; margin-top: 20px; }
