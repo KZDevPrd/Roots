@@ -6,14 +6,11 @@
     <title>Roots | Local Guide</title>
     
     <link rel="manifest" href="manifest.json">
-    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Roots">
     <meta name="theme-color" content="#d35400">
 
     <link rel="stylesheet" href="style.css">
-    
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADZHmJRts2oefxj8G2Jui8I_kihovwH5U&callback=initMap" async defer></script>
 </head>
 <body>
@@ -21,23 +18,22 @@
     <div id="app-container">
         <section id="map-section">
             <div id="map"></div>
-            <button id="recenter-btn" title="Find Me">🎯</button>
+            <button id="recenter-btn">🎯</button>
         </section>
 
         <section id="story-section">
             <header class="tour-header">
                 <h1>Neighborhood Roots</h1>
-                <p>Follow the path to discover the local heart of the city.</p>
-                <div class="scroll-indicator">Swipe up to start ↓</div>
+                <p>A curated walk through the hidden heart of the city.</p>
+                <div class="scroll-indicator">Scroll to begin your journey ↓</div>
             </header>
 
             <div id="card-container">
                 </div>
-            
+
             <footer class="tour-footer">
-                <p>You've reached the end!</p>
-                <p>I hope you enjoyed my favorite spots.</p>
-                <button onclick="document.getElementById('story-section').scrollTo(0,0)" class="back-to-top">Back to Start</button>
+                <p>You've reached the end of this route!</p>
+                <button onclick="document.getElementById('story-section').scrollTo(0,0)" class="back-btn">Back to Start</button>
             </footer>
         </section>
     </div>

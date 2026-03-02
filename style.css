@@ -1,157 +1,106 @@
 :root {
-    /* Color Palette */
     --bg-color: #fcfaf7;
     --card-bg: #ffffff;
     --text-main: #2d2d2d;
-    --text-muted: #757575;
-    --accent: #d35400; /* Terracotta */
-    
-    /* App Ratios */
+    --accent: #d35400;
     --map-height: 30vh;
     --story-height: 70vh;
 }
 
-* { 
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0; 
-    -webkit-tap-highlight-color: transparent;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background-color: var(--bg-color);
-    color: var(--text-main);
     height: 100vh;
-    width: 100vw;
-    overflow: hidden; /* Prevents the "bounce" effect of the whole page */
+    overflow: hidden;
 }
 
-#app-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
+#app-container { display: flex; flex-direction: column; height: 100vh; }
 
-/* --- Map Section --- */
-#map-section {
-    position: relative;
-    height: var(--map-height);
-    width: 100%;
-    z-index: 10;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-}
-
+/* --- Map --- */
+#map-section { height: var(--map-height); position: relative; z-index: 10; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 #map { height: 100%; width: 100%; }
-
 #recenter-btn {
-    position: absolute;
-    bottom: 12px;
-    right: 12px;
-    background: white;
-    border: none;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    font-size: 20px;
-    z-index: 11;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: absolute; bottom: 10px; right: 10px;
+    background: white; border: none; width: 40px; height: 40px;
+    border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 11;
 }
 
-/* --- Story Section (The Paged Scroller) --- */
+/* --- Story Scrolling --- */
 #story-section {
     height: var(--story-height);
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory;
+    overflow-y: auto;
     scroll-behavior: smooth;
-    background-color: var(--bg-color);
-    /* Safe Area for iPhone Notch/Island */
-    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--bg-color);
+    -webkit-overflow-scrolling: touch;
 }
 
+/* Hide scrollbar */
 #story-section::-webkit-scrollbar { display: none; }
 
-.tour-header, .card, .tour-footer {
-    height: var(--story-height);
-    width: 100%;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    padding: 30px 24px;
+.tour-header {
+    height: var(--story-height); /* Header still takes full initial view */
     display: flex;
     flex-direction: column;
-}
-
-/* --- Content Styling --- */
-.tour-header {
     justify-content: center;
     text-align: center;
+    padding: 30px;
 }
 
-.tour-header h1 { font-size: 2.4rem; color: var(--accent); margin-bottom: 12px; }
-.scroll-indicator { margin-top: 40px; color: var(--text-muted); font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; }
+.tour-header h1 { font-size: 2.2rem; color: var(--accent); margin-bottom: 15px; }
 
 .card {
     background: var(--card-bg);
-    border-top: 1px solid rgba(0,0,0,0.05);
+    padding: 40px 24px;
+    min-height: 50vh; /* Ensures cards feel substantial */
+    border-bottom: 1px solid #eee;
+    opacity: 0.4;
+    transition: opacity 0.6s ease;
 }
+
+.card.active { opacity: 1; }
 
 .card-img {
     width: 100%;
-    height: 38%; /* Adjusted to leave plenty of room for text */
+    max-height: 300px;
     object-fit: cover;
-    border-radius: 16px;
+    border-radius: 12px;
     margin-bottom: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-.card-content {
-    flex: 1;
-    overflow-y: auto;
-}
-
-.card-name { font-size: 1.6rem; margin-bottom: 8px; font-weight: 800; }
-.card-desc { font-size: 1rem; color: var(--text-main); margin-bottom: 15px; }
-
+.card-name { font-size: 1.6rem; margin-bottom: 10px; }
 .fact-box {
     background: #fdf2e9;
-    padding: 16px;
-    border-radius: 12px;
-    border-left: 5px solid var(--accent);
-    margin-bottom: 20px;
+    padding: 15px;
+    border-left: 4px solid var(--accent);
+    margin: 20px 0;
     font-size: 0.95rem;
-    line-height: 1.5;
 }
 
 .cta-button {
-    display: block;
-    width: 100%;
-    background: var(--accent);
-    color: white;
-    text-align: center;
-    padding: 18px;
-    text-decoration: none;
-    border-radius: 14px;
-    font-weight: bold;
-    font-size: 1.1rem;
-    box-shadow: 0 4px 15px rgba(211, 84, 0, 0.3);
+    display: block; width: 100%; background: var(--accent);
+    color: white; text-align: center; padding: 16px;
+    text-decoration: none; border-radius: 12px; font-weight: bold;
 }
 
-/* --- Footer --- */
-.tour-footer {
+/* --- The Bridges (Arrows) --- */
+.route-bridge {
+    height: 180px; /* Space between stories */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    text-align: center;
-    background: #eeeae4;
+    color: var(--accent);
 }
 
-.back-to-top {
-    margin-top: 20px;
-    background: transparent;
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-weight: bold;
+.bridge-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; opacity: 0.6; }
+.bridge-arrows { font-size: 2rem; animation: bounce 2s infinite; }
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(15px); }
 }
+
+.tour-footer { padding: 60px 24px; text-align: center; background: #eeeae4; }
+.back-btn { background: none; border: 1px solid var(--accent); color: var(--accent); padding: 8px 16px; border-radius: 20px; margin-top: 15px; }
