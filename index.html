@@ -1,1 +1,37 @@
-tst
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Roots | Local Guide</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADZHmJRts2oefxj8G2Jui8I_kihovwH5U&callback=initMap" async defer></script>
+</head>
+<body>
+
+    <div id="app-container">
+        <section id="map-section">
+            <div id="map"></div>
+            <button id="recenter-btn" title="Find Me">🎯</button>
+        </section>
+
+        <section id="story-section">
+            <header class="tour-header">
+                <h1>Neighborhood Roots</h1>
+                <p>A curated walk through my favorite corners.</p>
+                <div class="scroll-indicator">Scroll to start ↓</div>
+            </header>
+
+            <div id="card-container">
+                </div>
+
+            <footer class="tour-footer">
+                <p>Hope you enjoyed the walk!</p>
+                <p>— Your Host</p>
+            </footer>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
