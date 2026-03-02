@@ -1,22 +1,32 @@
 [
   {
     "id": "stop1",
-    "name": "The Hidden Archway",
-    "picture": "assets/archway.jpg",
-    "description": "This 17th-century archway was once the main entrance to the city's artisan quarter.",
+    "name": "Sveta Petka Church",
+    "picture": "assets/Sveta_Petka.jpg",
+    "description": "This church is our first stop. It has been the starting point for the walk of my granddad",
     "facts": "Look closely at the left pillar; you can still see the markings left by stone masons from 300 years ago.",
-    "lat": 52.5200,
-    "lng": 13.4050,
+    "lat": 42.14478252527062,
+    "lng": 24.754876595044294,
     "zoomLevel": 17
   },
   {
     "id": "stop2",
-    "name": "Kaffee & Kunst",
-    "picture": "assets/coffee.jpg",
-    "description": "The best espresso in the neighborhood. The owner, Marco, roasts the beans in the back every Tuesday.",
+    "name": "Savi Gelato & Specialty Coffee",
+    "picture": "assets/Savi Gelato.jpg",
+    "description": "The best espresso in the neighborhood. The owner, Savi, roasts the beans in the back every Tuesday.",
     "facts": "The building was originally a pharmacy in the 1920s—notice the original apothecary drawers behind the counter.",
-    "lat": 52.5215,
-    "lng": 13.4080,
+    "lat": 42.143962017898886,
+    "lng": 24.747926994381327,
+    "zoomLevel": 18
+  },
+    {
+    "id": "stop3",
+    "name": "Kapana District",
+    "picture": "assets/stroll_main_street.jpg",
+    "description": "Walk the main street, which used to be a shopping destination for all the people in town",
+    "facts": "The buildings are predominantly from the 19th centure and feature a xyz architecture.",
+    "lat": 42.150016, 
+    "lng": 24.749318,
     "zoomLevel": 18
   }
 ]
