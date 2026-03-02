@@ -1,14 +1,14 @@
 :root {
     --bg-color: #fcfaf7;
     --card-bg: #ffffff;
-    --accent: #d35400; /* Terracotta */
+    --accent: #d35400;
 }
 
 * { 
     box-sizing: border-box; 
     margin: 0; 
     padding: 0; 
-    font-family: 'Poppins', sans-serif; /* Global Font */
+    font-family: 'Poppins', sans-serif;
 }
 
 html, body {
@@ -19,7 +19,8 @@ html, body {
 
 #app-container {
     display: grid;
-    grid-template-rows: auto 30vh 6px 1fr;
+    /* Row 3 updated to 20px for the map spacer */
+    grid-template-rows: auto 30vh 20px 1fr;
     height: 100vh;
     width: 100%;
 }
@@ -42,6 +43,9 @@ html, body {
 
 .app-logo { font-weight: 800; letter-spacing: 2px; color: var(--accent); }
 
+.burger-menu { width: 24px; height: 18px; display: flex; flex-direction: column; justify-content: space-between; }
+.burger-menu span { height: 2px; width: 100%; background: var(--accent); border-radius: 2px; }
+
 /* --- Map --- */
 #map-section { position: relative; width: 100%; height: 100%; }
 #map { height: 100%; width: 100%; display: block; }
@@ -50,7 +54,13 @@ html, body {
     background: white; border: none; width: 44px; height: 44px;
     border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 11;
 }
-.map-spacer { background: var(--bg-color); border-bottom: 1px solid rgba(0,0,0,0.1); }
+
+/* --- Map Spacer (Updated to 20px) --- */
+.map-spacer { 
+    height: 20px; 
+    background: var(--bg-color); 
+    border-bottom: 1px solid rgba(0,0,0,0.05); 
+}
 
 /* --- Story Section & Anchoring --- */
 #story-section {
@@ -69,11 +79,10 @@ html, body {
     padding: 30px 24px;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centrally Aligned Header & Content */
+    align-items: center;
     text-align: center;
 }
 
-/* --- Typography & Header --- */
 .accent-title { 
     color: var(--accent); 
     font-weight: 800; 
@@ -101,7 +110,7 @@ html, body {
     margin-bottom: 20px;
 }
 
-/* --- Tip (Fact Box) Spacing --- */
+/* --- Tip Spacing --- */
 .fact-box {
     background: #fdf2e9;
     padding: 16px;
@@ -109,12 +118,12 @@ html, body {
     border-radius: 8px;
     font-size: 0.9rem;
     margin-top: 15px;
-    margin-bottom: 40px; /* Crucial: Creates space before the button */
-    text-align: left; /* Keep text left-aligned inside the centered box for readability */
+    margin-bottom: 40px; /* Space before button */
+    text-align: left;
     width: 100%;
 }
 
-/* --- Unified Button Style --- */
+/* --- Buttons --- */
 .btn-primary, .cta-button {
     display: block;
     width: 100%;
@@ -129,7 +138,12 @@ html, body {
     border: none;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(211, 84, 0, 0.2);
-    margin-top: auto; /* Pushes button to bottom of container */
+    margin-top: auto;
+}
+
+/* Specific 20px bottom spacing for footer button */
+.footer-btn {
+    margin-bottom: 20px;
 }
 
 /* --- Bridges --- */
@@ -150,6 +164,6 @@ html, body {
     display: flex; flex-direction: column; justify-content: center;
     align-items: center; gap: 40px;
 }
-.side-menu.active { right: 0; }
+.side-menu.active { right: 0; box-shadow: -10px 0 30px rgba(0,0,0,0.1); }
 .side-menu a { font-size: 1.6rem; text-decoration: none; color: var(--accent); font-weight: bold; }
 .close-menu { position: absolute; top: 30px; right: 30px; font-size: 2rem; color: var(--accent); }
